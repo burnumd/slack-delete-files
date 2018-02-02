@@ -7,10 +7,10 @@
 Because Slack comes with limited file storage and there's no way to bulk delete files using the web interface in order to free up space. ([Source](https://get.slack.help/hc/en-us/articles/218159688-Delete-shared-files))
 
 ## Install
-:warning: Make sure you have [Node.js](https://nodejs.org/) 5+ installed.
+:warning: Make sure you have [Node.js](https://nodejs.org/) 8+ installed.
 
 ```sh
-$ npm install -g slack-delete-files
+$ npx slack-delete-files
 ```
 
 > This installs it globally so you can use it from anywhere in your computer.
