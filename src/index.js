@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const inquirer = require('inquirer');
 
 const { deleteFiles, filterFiles, getFiles } = require('./file_operations');
