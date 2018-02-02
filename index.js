@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import inquirer from 'inquirer';
+const inquirer = require('inquirer');
 
-import { deleteFiles, filterFiles, getFiles } from './file_operations';
+const { deleteFiles, filterFiles, getFiles } = require('./file_operations');
 
 const run = (token, options) => {
   const deleteOlderThan = Math.floor(new Date().getTime() / 1000) - (options.daysOld * 86400);
