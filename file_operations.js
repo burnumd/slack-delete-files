@@ -1,4 +1,4 @@
-import got from 'got';
+const got = require('got');
 
 const API_URL = 'https://slack.com/api';
 
