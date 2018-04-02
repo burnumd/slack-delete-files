@@ -10,15 +10,15 @@
   "author": "Diéssica Gurskas <diessicode@gmail.com> (https://diessi.ca)",
   "license": "MIT",
   "dependencies": {
-    "got": "^8.0.3",
-    "inquirer": "^5.0.1"
+    "got": "^8.3.0",
+    "inquirer": "^5.2.0"
   },
   "bin": {
     "slack-delete-files": "index.js"
   },
   "devDependencies": {
-    "eslint": "^4.16.0",
+    "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.8.0"
+    "eslint-plugin-import": "^2.10.0"
   }
 }

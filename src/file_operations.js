@@ -2,14 +2,18 @@ const got = require('got');
 
 const API_URL = 'https://slack.com/api';
 
-const getFiles = (token, deleteDate) => got(`${API_URL}/files.list`, {
-  body: {
-    token,
-    ts_to: deleteDate,
-    count: 1000,
-  },
-  json: true,
-});
+const getFiles = async (token, deleteDate) => {
+  let response = await got(encodeURI(`${API_URL}/files.list?token=${token}&ts_to=${deleteDate}&count=1000`));
+  let responseBody = [];
+  response = JSON.parse(response.body);
+  if (response.ok) {
+    responseBody = response.files;
+  } else {
+    throw new Error(`Failed to retrieve files.\nError: ${response.error}\nWarning: ${response.warning}\n`);
+  }
+
+  return responseBody;
+};
 
 const filterFiles = (files, options) => {
   if (!files) {
@@ -25,18 +29,20 @@ const filterFiles = (files, options) => {
     console.warn('There are no files to be deleted.');
   }
 
-  return filesToDelete;
+  return filesToDelete.map(file => file.id);
 };
 
-const deleteFiles = (token, files) => {
+const deleteFiles = async (token, files) => {
   console.log(`Deleting ${files.length} file(s)...`);
 
-  files.forEach(file => got(`${API_URL}/files.delete`, {
-    body: {
-      token,
-      file: file.id
-    }
-  }).then(() => console.log(`${file.name} was deleted.`)).catch(error => console.error('Error while deleting files.', error)));
+  const requests = [];
+  files.forEach(file => requests.push(got(encodeURI(`${API_URL}/files.delete?token=${token}&file=${file}`))));
+
+  Promise.all(requests)
+    .then(() => console.log(`Deleted ${files.length} files`))
+    .catch((error) => {
+      throw new Error(`Error while deleting files.\nError: ${error}`); 
+    });
 };
 
 module.exports = { deleteFiles, filterFiles, getFiles };

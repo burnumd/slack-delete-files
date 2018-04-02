@@ -2,13 +2,9 @@ const inquirer = require('inquirer');
 
 const { deleteFiles, filterFiles, getFiles } = require('./file_operations');
 
-const run = (token, options) => {
+const run = async (token, options) => {
   const deleteOlderThan = Math.floor(new Date().getTime() / 1000) - (options.daysOld * 86400);
-
-  getFiles(token, deleteOlderThan)
-    .then(response => filterFiles(response.body.files, options))
-    .then(files => deleteFiles(token, files))
-    .catch(console.error);
+  await deleteFiles(token, filterFiles(await getFiles(token, deleteOlderThan), options));
 };
 
 inquirer.prompt([
