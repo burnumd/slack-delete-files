@@ -45,4 +45,15 @@ const deleteFiles = async (token, files) => {
     });
 };
 
-module.exports = { deleteFiles, filterFiles, getFiles };
+const postCompleteMessage = async (token, generalChannelName, fileCount) => {
+  console.log('Complete. Letting the Slack know');
+  const response = await got(encodeURI(`${API_URL}/chat.postMessage?token=${token}&channel=${generalChannelName}&text=Deleted ${fileCount} files. https://media.tenor.com/images/120e3b9655c0aba52fd128f73d52a054/tenor.gif`));
+  console.log(response.body);
+};
+
+module.exports = {
+  deleteFiles,
+  filterFiles,
+  getFiles,
+  postCompleteMessage,
+};

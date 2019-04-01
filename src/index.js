@@ -1,10 +1,12 @@
 const inquirer = require('inquirer');
 
-const { deleteFiles, filterFiles, getFiles } = require('./file_operations');
+const { deleteFiles, filterFiles, getFiles, postCompleteMessage } = require('./file_operations');
 
 const run = async (token, options) => {
   const deleteOlderThan = Math.floor(new Date().getTime() / 1000) - (options.daysOld * 86400);
-  await deleteFiles(token, filterFiles(await getFiles(token, deleteOlderThan), options));
+  const finalFileList = filterFiles(await getFiles(token, deleteOlderThan), options)
+  await deleteFiles(token, finalFileList);
+  await postCompleteMessage(token, options.generalChannelName, finalFileList.length);
 };
 
 inquirer.prompt([
@@ -24,10 +26,16 @@ inquirer.prompt([
     name: 'keepPinned',
     type: 'confirm',
     default: false,
+  }, {
+    message: 'General Channel Name (without the "#")',
+    name: 'generalChannelName',
+    type: 'input',
+    default: 'general',
   },
 ])
   .then(answers => run(answers.token, {
     daysOld: answers.daysOld,
+    generalChannelName: answers.generalChannelName,
     keepPinned: answers.keepPinned,
   }))
   .catch(error => console.error('Error while asking for token.', error));
